@@ -1,36 +1,49 @@
 import random
-import time
 
-def is_valid(n):
-    if 0 < n < 100:
-        return True and n
+print("Добро пожаловать в числовую угадайку")
+
+
+def get_random_number(d1, d2):
+    return random.randint(d1, d2)
+
+
+def is_diapazon(x, y):  # Определение границ диапозона
+    if x > y:           # если начальная граница больше конечной, то свапаем с конечной
+        x, y = y, x
+        return x, y
     else:
-        return False
+        return x, y
 
-def loop(number):
-    if is_valid(number):
-        start_time = time.time()
-        while is_valid(number):
-            if number > random_int:
-                number = int(input("Слишком много, попробуйте еще раз: "))
-                continue
-            elif number < random_int:
-                number = int(input("Слишком мало, попробуйте еще раз: "))
-                continue
+def is_valid(num, a, b):      # тест на то, чтобы определить что это, если это цифра то ретурн
+    return num.isdigit() and float(num) - int(num) == 0 and a < int(num) < b
+
+def continue_game(word):
+        while word not in 'ДдНн':
+            word = input('Можете написать корректно? д = да / н = нет: ')
+        else:
+            if word in 'Дд':
+                game()
             else:
-                end_time = time.time()
-                print(f"Вы угадали, поздравляем! Вы потратили {int(end_time - start_time)} секунд на угадывание числа.")
-                break
-    else:
-        number = int(input("Далбаеб, введи числа в диапозоне от 1 до 100: "))
-        loop(number)
-    
+                print('До следующей встречи! Пока!')
 
-random_int = random.randint(1, 101)
-print("Добро пожаловать в игру 'Угадай число'!")
-print('Правила просты: я загадываю число от 1 до 100, а ты пытаешься отгадать его, предполагая число. Я буду говорить "слишком мало", "слишком много" или "верно", в зависимости от того, ближе твое предположение к загаданному числу или нет.')
-print('Для начала, попробуй угадать число.Введите свое предположение:')
+def game():
+    total = 0
+    x, y = int(input("Введите начало диапозона: ")), int(input("Введите конец диапозона: "))
+    a, b = is_diapazon(x, y)
+    r = random.randint(a, b)
+    n = input("Для начала, попробуй угадать число. Введите свое предположение: ")
+    while is_valid(n, a, b):
+        if int(n) > r:
+            n = input("Слишком много, попробуйте еще раз: ")
+            total += 1
+            continue
+        elif int(n) < r:
+            n = input("Слишком мало, попробуйте еще раз: ")
+            total += 1
+            continue
+        else:
+            print(f"Вы угадали, поздравляем! Вы потратили {total} попыток на угадывание числа.")
+            continue_game(input("Следующая игра? д = да / н = нет: ")) # если пользователь хочет продолжит игру
+            break
 
-number = int(input())
-loop(number)
-print("Спасибо, что играли в числовую угадайку. Еще увидимся...")
+game()
